@@ -36,6 +36,7 @@
           }
         }
       ],
+      "copyright":"NOASSERTION",
       "cpe": "cpe:2.3:*:some:package:1:*:*:*:*:*:*:*",
       "purl": "a-purl-1",
       "properties": [
@@ -67,6 +68,7 @@
     },
     {
       "bom-ref":"redacted",
+      "copyright":"NOASSERTION",
       "type": "library",
       "name": "package-2",
       "version": "2.0.1",
