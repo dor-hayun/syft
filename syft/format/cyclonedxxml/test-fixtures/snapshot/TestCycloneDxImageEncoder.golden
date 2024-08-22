@@ -25,6 +25,7 @@
           <id>MIT</id>
         </license>
       </licenses>
+      <copyright>NOASSERTION</copyright>
       <cpe>cpe:2.3:*:some:package:1:*:*:*:*:*:*:*</cpe>
       <purl>a-purl-1</purl>
       <properties>
@@ -39,6 +40,7 @@
     <component bom-ref="redacted" type="library">
       <name>package-2</name>
       <version>2.0.1</version>
+      <copyright>NOASSERTION</copyright>
       <cpe>cpe:2.3:*:some:package:2:*:*:*:*:*:*:*</cpe>
       <purl>pkg:deb/debian/package-2@2.0.1</purl>
       <properties>
