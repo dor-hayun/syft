@@ -10,6 +10,11 @@ import (
 	"github.com/anchore/syft/syft/pkg"
 )
 
+const (
+	noAssertion     = "NOASSERTION"
+	copyrightPrefix = "Copyright"
+)
+
 // This should be a function that just surfaces licenses already validated in the package struct
 func encodeLicenses(p pkg.Package) *cyclonedx.Licenses {
 	spdx, other, ex := separateLicenses(p)
@@ -54,17 +59,14 @@ func decodeLicenses(c *cyclonedx.Component) []pkg.License {
 	}
 
 	for _, l := range *c.Licenses {
-		if l.License == nil {
-			continue
-		}
 		// these fields are mutually exclusive in the spec
 		switch {
-		case l.License.ID != "":
+		case l.License != nil && l.License.ID != "":
 			licenses = append(licenses, pkg.NewLicenseFromURLs(l.License.ID, l.License.URL))
-		case l.License.Name != "":
+		case l.License != nil && l.License.Name != "":
 			licenses = append(licenses, pkg.NewLicenseFromURLs(l.License.Name, l.License.URL))
 		case l.Expression != "":
-			licenses = append(licenses, pkg.NewLicenseFromURLs(l.Expression, l.License.URL))
+			licenses = append(licenses, pkg.NewLicense(l.Expression))
 		default:
 		}
 	}
@@ -197,4 +199,32 @@ func reduceOuter(expression string) string {
 	}
 
 	return sb.String()
+}
+
+func encodeCopyrights(p pkg.Package) string {
+	if p.Copyrights.Empty() {
+		return ""
+	}
+
+	var strArr []string
+
+	for _, c := range p.Copyrights.ToSlice() {
+		var sb strings.Builder
+		sb.WriteString(copyrightPrefix)
+
+		// Construct the string with Start Year, End Year, and Author
+		if c.StartYear != "" {
+			sb.WriteString(" " + c.StartYear)
+		}
+		if c.EndYear != "" {
+			sb.WriteString("-" + c.EndYear)
+		}
+		if c.Author != "" {
+			sb.WriteString(" " + c.Author)
+		}
+
+		strArr = append(strArr, sb.String())
+	}
+
+	return strings.Join(strArr, ", ")
 }
